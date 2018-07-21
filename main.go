@@ -1,11 +1,10 @@
 package main
 
 import (
-	"bufio"
+	"encoding/json"
 	"flag"
 	"fmt"
 	"log"
-	"os"
 	"strings"
 
 	"github.com/shogo82148/androidbinary/apk"
@@ -36,7 +35,6 @@ About:
 }
 
 func main() {
-
 	flag.Parse()
 	filename := flag.Arg(0)
 	pkg, err := apk.OpenFile(filename)
@@ -45,19 +43,36 @@ func main() {
 	}
 	pkgName := pkg.PackageName()
 	mainActivity, _ := pkg.MainActivity()
-	// log.Println(os.Args)
-	fmt.Printf("Package >>\n")
-	fmt.Printf("\tPackageName:  %s\n", pkgName)
-	fmt.Printf("\tMainActivity: %s\n", mainActivity)
-	fmt.Print("Shell >>\n")
-	fmt.Printf("\tadb shell am start -a %s/%s\n", pkgName, mainActivity)
-	fmt.Println("AppCrawler >>")
+	if !strings.Contains(mainActivity, ".") {
+		mainActivity = "." + mainActivity
+	}
+
 	shortMainActivity := mainActivity
 	if strings.HasPrefix(mainActivity, pkgName) {
 		shortMainActivity = mainActivity[len(pkgName):]
 	}
-	fmt.Printf("\t--capability appPackage=%s,appActivity=%s\n", pkgName, shortMainActivity)
 
-	fmt.Print("Press Enter to exit. ")
-	bufio.NewReader(os.Stdin).ReadBytes('\n')
+	// log.Println(os.Args)
+	fmt.Printf("## Package\n")
+	fmt.Printf("PackageName:  %s\n", pkgName)
+	fmt.Printf("MainActivity: %s\n", mainActivity)
+
+	fmt.Print("\n## ADB\n")
+	fmt.Printf("adb shell am start -a %s/%s\n", pkgName, shortMainActivity)
+
+	fmt.Println("\n## AppCrawler")
+	fmt.Printf("appcrawler --capability appPackage=%s,appActivity=%s\n", pkgName, shortMainActivity)
+
+	fmt.Println("\n## Appium")
+	data, _ := json.MarshalIndent(map[string]interface{}{
+		"platformName":    "Android",
+		"deviceName":      "whatever",
+		"appPackage":      pkgName,
+		"appActivity":     shortMainActivity,
+		"unicodeKeyboard": true,
+		"resetKeyboard":   true,
+	}, "", "   ")
+	fmt.Println(string(data))
+	// fmt.Print("Press Enter to exit. ")
+	// bufio.NewReader(os.Stdin).ReadBytes('\n')
 }
