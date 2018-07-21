@@ -1,0 +1,11 @@
+builds:
+  main: .
+  goos:
+  - linux
+  - windows
+  - darwin
+brew:
+  github: 
+    owner: openatx
+    name: homebrew-tap
+  folder: Formula
