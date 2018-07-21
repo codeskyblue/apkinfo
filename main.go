@@ -65,12 +65,16 @@ func main() {
 
 	fmt.Println("\n## Appium")
 	data, _ := json.MarshalIndent(map[string]interface{}{
-		"platformName":    "Android",
-		"deviceName":      "whatever",
-		"appPackage":      pkgName,
-		"appActivity":     shortMainActivity,
-		"unicodeKeyboard": true,
-		"resetKeyboard":   true,
+		"platformName":       "Android",
+		"deviceName":         "whatever",
+		"appPackage":         pkgName,
+		"appActivity":        shortMainActivity,
+		"automationName":     "UiAutomator2",
+		"newCommandTimeout":  300,
+		"noReset":            false,
+		"dontStopAppOnReset": false,
+		"unicodeKeyboard":    true,
+		"resetKeyboard":      true,
 	}, "", "   ")
 	fmt.Println(string(data))
 	// fmt.Print("Press Enter to exit. ")

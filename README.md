@@ -36,5 +36,9 @@ appcrawler --capability appPackage=com.netease.cloudmusic,appActivity=.activity.
 }
 ```
 
+## References
+- [Appium Capabilities](https://github.com/appium/appium/blob/master/docs/en/writing-running-appium/caps.md)
+- [AppCrawler](https://github.com/seveniruby/AppCrawler)
+
 # LICENSE
 [MIT](LICENSE)
