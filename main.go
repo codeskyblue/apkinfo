@@ -58,6 +58,8 @@ func main() {
 	fmt.Printf("MainActivity: %s\n", mainActivity)
 
 	fmt.Print("\n## ADB\n")
+	fmt.Printf("adb shell am force-stop %s\n", pkgName)
+	fmt.Printf("adb shell pm clear %s\n", pkgName)
 	fmt.Printf("adb shell am start -a %s/%s\n", pkgName, shortMainActivity)
 
 	fmt.Println("\n## AppCrawler")
