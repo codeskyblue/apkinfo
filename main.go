@@ -44,7 +44,7 @@ func main() {
 		log.Fatal(err)
 	}
 	pkgName := pkg.PackageName()
-	mainActivity, _ := pkg.MainAcitivty()
+	mainActivity, _ := pkg.MainActivity()
 	// log.Println(os.Args)
 	fmt.Printf("Package >>\n")
 	fmt.Printf("\tPackageName:  %s\n", pkgName)
