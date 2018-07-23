@@ -14,28 +14,31 @@ var (
 	version = "dev"
 	commit  = "none"
 	date    = "unknown"
+
+	help = fmt.Sprintf(`apkinfo %s - (C) github.com/codeskyblue/apkinfo
+Released under the MIT License
+
+Usage: apkinfo [OPTIONS] apk-file
+
+OPTIONS:
+-h --help		Print this help screen
+`, version)
 )
 
 func init() {
 	flag.Usage = func() {
-		fmt.Printf(`Apkinfo is a tool to see apk info.
-
-Usage:
-
-    apkinfo <apk-file-path>
-
-About:
-
-    version %s, commit %s date %s
-
-    If there is any problem, please raise a issue in
-    https://github.com/codeskyblue/apkinfo
-`, version, commit, date)
+		fmt.Print(help)
 	}
 }
 
 func main() {
+	flag.String("icon", "", "save apk icon")
 	flag.Parse()
+	if flag.NArg() == 0 {
+		flag.Usage()
+		return
+	}
+
 	filename := flag.Arg(0)
 	pkg, err := apk.OpenFile(filename)
 	if err != nil {
@@ -53,14 +56,16 @@ func main() {
 	}
 
 	// log.Println(os.Args)
+	label, _ := pkg.Label(nil)
 	fmt.Printf("## Package\n")
+	fmt.Printf("LabelName: %s\n", label)
 	fmt.Printf("PackageName:  %s\n", pkgName)
 	fmt.Printf("MainActivity: %s\n", mainActivity)
 
 	fmt.Print("\n## ADB\n")
 	fmt.Printf("adb shell am force-stop %s\n", pkgName)
 	fmt.Printf("adb shell pm clear %s\n", pkgName)
-	fmt.Printf("adb shell am start -a %s/%s\n", pkgName, shortMainActivity)
+	fmt.Printf("adb shell am start -n %s/%s\n", pkgName, shortMainActivity)
 
 	fmt.Println("\n## AppCrawler")
 	fmt.Printf("appcrawler --capability appPackage=%s,appActivity=%s\n", pkgName, shortMainActivity)
