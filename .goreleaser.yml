@@ -4,8 +4,11 @@ builds:
   - linux
   - windows
   - darwin
+  ignore:
+  - goos: darwin
+    goarch: 386
 brew:
   github: 
-    owner: openatx
+    owner: codeskyblue
     name: homebrew-tap
   folder: Formula
