@@ -7,8 +7,8 @@ builds:
   ignore:
   - goos: darwin
     goarch: 386
-brew:
-  github: 
-    owner: codeskyblue
-    name: homebrew-tap
-  folder: Formula
+# brew:
+#   github: 
+#     owner: codeskyblue
+#     name: homebrew-tap
+#   folder: Formula

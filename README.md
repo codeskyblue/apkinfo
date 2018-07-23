@@ -2,7 +2,7 @@
 get apkinfo use pure go code. (packageName, mainActivty etc...)
 
 ## Install
-Download binaries from [releases](/releases)
+Download binaries from [releases](https://github.com/codeskyblue/apkinfo/releases)
 
 Or build from source
 
@@ -39,6 +39,7 @@ appcrawler --capability appPackage=com.netease.cloudmusic,appActivity=.activity.
 ## References
 - [Appium Capabilities](https://github.com/appium/appium/blob/master/docs/en/writing-running-appium/caps.md)
 - [AppCrawler](https://github.com/seveniruby/AppCrawler)
+- [Awesome-ADB](https://github.com/mzlogin/awesome-adb)
 
 # LICENSE
 [MIT](LICENSE)
