@@ -1,12 +1,14 @@
+archive:
+  format: zip
 builds:
--
-  goos:
-  - linux
-  - windows
-  - darwin
-  ignore:
-  - goos: darwin
-    goarch: 386
+  -
+    goos:
+    - linux
+    - windows
+    - darwin
+    ignore:
+    - goos: darwin
+      goarch: 386
 # brew:
 #   github: 
 #     owner: codeskyblue
