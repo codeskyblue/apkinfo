@@ -10,7 +10,9 @@ Or build from source
 $ go get -v github.com/codeskyblue/apkinfo
 ```
 
-## Usage
+![gif](apkinfo-win.gif)
+
+## Usage in commandline
 This tool is very simple to use.
 
 ```
