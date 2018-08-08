@@ -1,12 +1,17 @@
 package main
 
 import (
+	"bufio"
 	"encoding/json"
 	"flag"
 	"fmt"
+	"image/jpeg"
 	"log"
+	"os"
+	"path/filepath"
 	"strings"
 
+	"github.com/pkg/errors"
 	"github.com/shogo82148/androidbinary/apk"
 )
 
@@ -22,6 +27,8 @@ Usage: apkinfo [OPTIONS] apk-file
 
 OPTIONS:
 -h --help		Print this help screen
+--json          Show as json output
+--icon <path>   Save icon as file, only jpg support
 `, version)
 )
 
@@ -31,21 +38,7 @@ func init() {
 	}
 }
 
-func main() {
-	flag.String("icon", "", "save apk icon")
-	flag.Parse()
-	if flag.NArg() == 0 {
-		flag.Usage()
-		return
-	}
-
-	filename := flag.Arg(0)
-	pkg, err := apk.OpenFile(filename)
-	if err != nil {
-		log.Fatal(err)
-	}
-	pkgName := pkg.PackageName()
-	mainActivity, _ := pkg.MainActivity()
+func printDefault(pkgName, mainActivity, label string) {
 	if !strings.Contains(mainActivity, ".") {
 		mainActivity = "." + mainActivity
 	}
@@ -55,8 +48,6 @@ func main() {
 		shortMainActivity = mainActivity[len(pkgName):]
 	}
 
-	// log.Println(os.Args)
-	label, _ := pkg.Label(nil)
 	fmt.Printf("## Package\n")
 	fmt.Printf("LabelName: %s\n", label)
 	fmt.Printf("PackageName:  %s\n", pkgName)
@@ -84,6 +75,61 @@ func main() {
 		"resetKeyboard":      true,
 	}, "", "   ")
 	fmt.Println(string(data))
-	// fmt.Print("Press Enter to exit. ")
-	// bufio.NewReader(os.Stdin).ReadBytes('\n')
+}
+
+func saveAsJpeg(pkg *apk.Apk, path string) error {
+	img, err := pkg.Icon(nil)
+	if err != nil {
+		return errors.Wrap(err, "get icon")
+	}
+	f, err := os.Create(path)
+	if err != nil {
+		return errors.Wrap(err, "create file")
+	}
+	defer f.Close()
+	// log.Println(img)
+	return jpeg.Encode(f, img, &jpeg.Options{Quality: 80})
+}
+
+func main() {
+	iconPath := flag.String("icon", "", "save apk icon")
+	bjson := flag.Bool("json", false, "show as json format")
+	flag.Parse()
+	if flag.NArg() == 0 {
+		flag.Usage()
+		return
+	}
+
+	filename := flag.Arg(0)
+	pkg, err := apk.OpenFile(filename)
+	if err != nil {
+		log.Fatal(err)
+	}
+	pkgName := pkg.PackageName()
+	mainActivity, _ := pkg.MainActivity()
+	label, _ := pkg.Label(nil)
+	if *iconPath != "" {
+		if err := saveAsJpeg(pkg, *iconPath); err != nil {
+			log.Fatal(err)
+		}
+		return
+	}
+
+	if *bjson {
+		data, _ := json.MarshalIndent(map[string]interface{}{
+			"label":        label,
+			"packageName":  pkgName,
+			"mainActivity": mainActivity,
+			"versionName":  pkg.Manifest().VersionName,
+			"versionCode":  pkg.Manifest().VersionCode,
+		}, "", "  ")
+		fmt.Println(string(data))
+	} else {
+		printDefault(pkgName, mainActivity, label)
+	}
+
+	if filepath.IsAbs(filename) {
+		fmt.Print("Press Enter to exit. ")
+		bufio.NewReader(os.Stdin).ReadBytes('\n')
+	}
 }

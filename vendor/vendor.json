@@ -1,0 +1,25 @@
+{
+	"comment": "",
+	"ignore": "test",
+	"package": [
+		{
+			"checksumSHA1": "d6BycwPpKXW09I/tXMqcItE8SA4=",
+			"path": "github.com/pkg/errors",
+			"revision": "816c9085562cd7ee03e7f8188a1cfd942858cded",
+			"revisionTime": "2018-03-11T21:45:15Z"
+		},
+		{
+			"checksumSHA1": "prASThxFUGWu8eWUsEjWuTLHJK0=",
+			"path": "github.com/shogo82148/androidbinary",
+			"revision": "3f48f528944422a8bc5e1381a86e703af8b4fa9a",
+			"revisionTime": "2018-06-27T05:31:04Z"
+		},
+		{
+			"checksumSHA1": "XtV8c8K//jt694tqlidwuEhfZnk=",
+			"path": "github.com/shogo82148/androidbinary/apk",
+			"revision": "3f48f528944422a8bc5e1381a86e703af8b4fa9a",
+			"revisionTime": "2018-06-27T05:31:04Z"
+		}
+	],
+	"rootPath": "github.com/codeskyblue/apkinfo"
+}
